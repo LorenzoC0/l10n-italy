@@ -62,67 +62,32 @@ const FiscalPosOrder = (OriginalOrder) =>
             this.get_change();
         }
 
-        // Override export_as_JSON to fix integer fields with "null" string
+        // Override export_as_JSON to add fiscal fields to the order data
         export_as_JSON() {
-            const data = super.export_as_JSON(...arguments);
-
-            // Integer fields that must not be "null" string
-            const integerFields = [
-                "refund_report",
-                "refund_doc_num",
-                "fiscal_receipt_number",
-                "fiscal_z_rep_number",
-            ];
-
-            for (const field of integerFields) {
-                // If the field exists in data and is "null" string, convert to false
-                if (field in data) {
-                    if (
-                        data[field] === "null" ||
-                        data[field] === null ||
-                        data[field] === undefined ||
-                        data[field] === ""
-                    ) {
-                        data[field] = false;
-                    } else if (typeof data[field] === "string") {
-                        // Try to parse as integer
-                        const parsed = parseInt(data[field], 10);
-                        data[field] = isNaN(parsed) ? false : parsed;
-                    }
+            const json = super.export_as_JSON(...arguments);
+            this.check_order_has_refund();
+            json.lottery_code = this.lottery_code || null;
+            json.refund_report = this.refund_report || null;
+            json.refund_date = this.refund_date || null;
+            json.refund_doc_num = this.refund_doc_num || null;
+            json.refund_cash_fiscal_serial = this.refund_cash_fiscal_serial || null;
+            json.refund_full_refund = this.refund_full_refund || false;
+            json.fiscal_receipt_number = this.fiscal_receipt_number || null;
+            json.fiscal_receipt_amount = this.fiscal_receipt_amount || null;
+            // Parsed by backend
+            json.fiscal_receipt_date = this.fiscal_receipt_date || null;
+            json.fiscal_z_rep_number = this.fiscal_z_rep_number || null;
+            json.fiscal_printer_serial = this.fiscal_printer_serial || null;
+            json.fiscal_printer_debug_info = this.fiscal_printer_debug_info || null;
+            try {
+                if (this.pos.config.module_pos_hr) {
+                    json.fiscal_operator_number =
+                        this.pos.cashier.fiscal_operator_number || null;
+                } else {
+                    json.fiscal_operator_number = "1";
                 }
-            }
-
-            // Handle other fields that might have "null" string
-            const otherFields = [
-                "refund_date",
-                "refund_cash_fiscal_serial",
-                "fiscal_receipt_date",
-                "fiscal_printer_serial",
-                "fiscal_printer_debug_info",
-                "fiscal_operator_number",
-                "lottery_code",
-            ];
-
-            for (const field of otherFields) {
-                if (field in data && (data[field] === "null" || data[field] === null)) {
-                    data[field] = false;
-                }
-            }
-
-            // Ensure fiscal_receipt_amount is a number
-            if ("fiscal_receipt_amount" in data) {
-                if (
-                    data.fiscal_receipt_amount === "null" ||
-                    data.fiscal_receipt_amount === null
-                ) {
-                    data.fiscal_receipt_amount = 0;
-                } else if (typeof data.fiscal_receipt_amount === "string") {
-                    data.fiscal_receipt_amount =
-                        parseFloat(data.fiscal_receipt_amount) || 0;
-                }
-            }
-
-            return data;
+            } catch (error) {}
+            return json;
         }
     };
 
