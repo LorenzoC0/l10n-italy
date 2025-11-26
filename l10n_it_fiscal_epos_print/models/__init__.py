@@ -5,3 +5,4 @@ from . import pos_order
 from . import res_config_settings
 from . import res_users
 from . import hr_employee
+from . import pos_session

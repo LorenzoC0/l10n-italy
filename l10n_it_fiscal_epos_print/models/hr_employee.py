@@ -13,9 +13,3 @@ class HrEmployeeInherit(models.AbstractModel):
         for rec in self:
             if rec.user_id:
                 rec.user_id.fiscal_operator_number = rec.fiscal_operator_number
-
-    @api.model
-    def _load_pos_data_fields(self, config_id):
-        fields = super()._load_pos_data_fields(config_id)
-        fields.append("fiscal_operator_number")
-        return fields
