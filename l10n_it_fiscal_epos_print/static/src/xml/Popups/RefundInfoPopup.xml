@@ -1,79 +1,83 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates id="template" xml:space="preserve">
 
-    <t t-name="RefundInfoPopup" owl="1">
-        <Dialog title="props.title" size="'md'">
-            <div class='client-detail'>
-                <div class='label'>Closing Seq.</div>
-                <input
-                    id="refund_report"
-                    class="detail refund_report"
-                    type='text'
-                    t-att-value="props.refund_report || ''"
-                    t-ref="inputRefundReport"
-                    placeholder="Max 4 numbers"
-                />
-            </div>
-            <div class='client-detail'>
-                <div class='label'>Receipt Num.</div>
-                <input
-                    id="refund_doc_num"
-                    class="detail refund_doc_num"
-                    type='text'
-                    t-att-value="props.refund_doc_num || ''"
-                    t-ref="inputRefundDocNum"
-                    placeholder="Max 4 numbers"
-                />
-            </div>
-            <div class='client-detail'>
-                <div class='label'>Receipt Date</div>
-                <input
-                    id="refund_date"
-                    class="detail refund_date"
-                    type='text'
-                    pattern="\d{4}-\d{2}-\d{2}"
-                    t-att-value="props.refund_date || ''"
-                    t-ref="inputRefundDate"
-                    placeholder="YYYY-MM-DD"
-                />
-            </div>
-            <div class='client-detail'>
-                <div class='label'>RT Serial</div>
-                <input
-                    id="refund_cash_fiscal_serial"
-                    class="detail refund_cash_fiscal_serial"
-                    type='text'
-                    t-att-value="props.refund_cash_fiscal_serial || ''"
-                    t-ref="inputRefundCashFiscalSerial"
-                    placeholder="RT Serial"
-                />
-            </div>
-            <div class='client-detail'>
-                <div class='label'>Full Refund</div>
-                <input
-                    id="refund_full_refund"
-                    class="detail refund_full_refund"
-                    type='checkbox'
-                    t-att-checked="props.refund_full_refund || ''"
-                    t-ref="inputRefundFullRefund"
-                />
-            </div>
-            <div
-                id="error-message-dialog"
-                style="color: red; font-weight: bold; font-size: 18px; font-style: italic; margin-top: 10px;"
-                t-att-class="{'d-none': !state.showError}"
-            >
-                Some fields are empty.
-            </div>
-            <t t-set-slot="footer">
-                <button class="btn btn-primary" t-on-click="clickConfirmRefund">
+    <t t-name="l10n_it_fiscal_epos_print.RefundInfoPopup" owl="1">
+        <div class="popup popup-text">
+            <header class="title">
+                <t t-esc="props.title" />
+            </header>
+            <main class="body">
+                <div class='client-detail'>
+                    <div class='label'>Closing Seq.</div>
+                    <input
+                        id="refund_report"
+                        class="detail refund_report"
+                        type='text'
+                        t-att-value="props.refund_report || ''"
+                        t-ref="inputRefundReport"
+                        placeholder="Max 4 numbers"
+                    />
+                </div>
+                <div class='client-detail'>
+                    <div class='label'>Receipt Num.</div>
+                    <input
+                        id="refund_doc_num"
+                        class="detail refund_doc_num"
+                        type='text'
+                        t-att-value="props.refund_doc_num || ''"
+                        t-ref="inputRefundDocNum"
+                        placeholder="Max 4 numbers"
+                    />
+                </div>
+                <div class='client-detail'>
+                    <div class='label'>Receipt Date</div>
+                    <input
+                        id="refund_date"
+                        class="detail refund_date"
+                        type='text'
+                        pattern="\d{4}-\d{2}-\d{2}"
+                        t-att-value="props.refund_date || ''"
+                        t-ref="inputRefundDate"
+                        placeholder="YYYY-MM-DD"
+                    />
+                </div>
+                <div class='client-detail'>
+                    <div class='label'>RT Serial</div>
+                    <input
+                        id="refund_cash_fiscal_serial"
+                        class="detail refund_cash_fiscal_serial"
+                        type='text'
+                        t-att-value="props.refund_cash_fiscal_serial || ''"
+                        t-ref="inputRefundCashFiscalSerial"
+                        placeholder="RT Serial"
+                    />
+                </div>
+                <div class='client-detail'>
+                    <div class='label'>Full Refund</div>
+                    <input
+                        id="refund_full_refund"
+                        class="detail refund_full_refund"
+                        type='checkbox'
+                        t-att-checked="props.refund_full_refund || ''"
+                        t-ref="inputRefundFullRefund"
+                    />
+                </div>
+                <div
+                    t-if="state.showError"
+                    style="color: red; font-weight: bold; font-size: 18px; font-style: italic; margin-top: 10px;"
+                >
+                    Some fields are empty.
+                </div>
+            </main>
+            <footer class="footer">
+                <div class="button highlight confirm" t-on-click="confirm">
                     <t t-esc="props.confirmText" />
-                </button>
-                <button class="btn btn-secondary" t-on-click="props.close">
+                </div>
+                <div class="button cancel" t-on-click="cancel">
                     <t t-esc="props.cancelText" />
-                </button>
-            </t>
-        </Dialog>
+                </div>
+            </footer>
+        </div>
     </t>
 
 </templates>

@@ -26,22 +26,31 @@ Registries.Model.extend(PosGlobalState, FiscalPosGlobalState);
 
 const FiscalPosOrder = (OriginalOrder) =>
     class extends OriginalOrder {
-        constructor(obj, options) {
+        constructor() {
             super(...arguments);
-            // Initialize refund fields
-            this.has_refund = false;
-            this.refund_report = this.refund_report || null;
-            this.refund_date = this.refund_date || null;
-            this.refund_doc_num = this.refund_doc_num || null;
-            this.refund_cash_fiscal_serial = this.refund_cash_fiscal_serial || null;
-            this.refund_full_refund = this.refund_full_refund || false;
-            // Check for refund items when order is created
             this.check_order_has_refund();
         }
 
         check_order_has_refund() {
             const lines = this.orderlines;
             this.has_refund = lines.some((line) => line.quantity < 0);
+        }
+
+        init_from_JSON(json) {
+            super.init_from_JSON(...arguments);
+            this.lottery_code = json.lottery_code || null;
+            this.refund_report = json.refund_report || null;
+            this.refund_date = json.refund_date || null;
+            this.refund_doc_num = json.refund_doc_num || null;
+            this.refund_cash_fiscal_serial = json.refund_cash_fiscal_serial || null;
+            this.refund_full_refund = json.refund_full_refund || false;
+            this.fiscal_receipt_number = json.fiscal_receipt_number || null;
+            this.fiscal_receipt_amount = json.fiscal_receipt_amount || null;
+            this.fiscal_receipt_date = json.fiscal_receipt_date || null;
+            this.fiscal_z_rep_number = json.fiscal_z_rep_number || null;
+            this.fiscal_printer_serial = json.fiscal_printer_serial || null;
+            this.fiscal_printer_debug_info = json.fiscal_printer_debug_info || null;
+            this.check_order_has_refund();
         }
 
         getPrinterOptions() {

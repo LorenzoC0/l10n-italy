@@ -7,10 +7,10 @@ export const refundUtils = {
     getButtonColor(order) {
         let color = "#e2e2e2";
         if (order) {
-            const lines = order.lines;
+            const lines = order.get_orderlines();
             const has_refund =
                 lines.find(function (line) {
-                    return line.qty < 0.0 || line.quantity < 0.0;
+                    return line.get_quantity() < 0.0;
                 }) !== undefined;
             if (has_refund === true) {
                 if (

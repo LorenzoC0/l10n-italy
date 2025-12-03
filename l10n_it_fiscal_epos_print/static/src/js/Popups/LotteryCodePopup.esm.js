@@ -25,6 +25,10 @@ export class LotteryCodePopup extends AbstractAwaitablePopup {
         this.state.showError = false;
     }
 
+    getPayload() {
+        return this.state.lotteryCode.trim();
+    }
+
     async confirm() {
         const lotteryCode = this.state.lotteryCode.trim();
 
@@ -39,16 +43,8 @@ export class LotteryCodePopup extends AbstractAwaitablePopup {
             currentOrder.lottery_code = lotteryCode;
         }
 
-        // Call the onConfirm callback if provided
-        if (this.props.onConfirm) {
-            this.props.onConfirm(lotteryCode);
-        }
-
-        this.cancel();
-    }
-
-    getPayload() {
-        return this.state.lotteryCode;
+        // Call parent confirm to close popup and return payload
+        return super.confirm();
     }
 }
 
